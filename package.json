@@ -1,0 +1,22 @@
+{
+  "name": "todo-backend",
+  "version": "1.0.0",
+  "description": "todo practice - backend [express, typescript, sequelize]",
+  "main": "index.js",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0",
+    "mysql2": "^2.3.3",
+    "sequelize": "^6.12.0-alpha.1",
+    "sequelize-cli": "^6.3.0"
+  },
+  "devDependencies": {},
+  "author": "woog2roid",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/woog2roid/todo-backend/issues"
+  },
+  "homepage": "https://github.com/woog2roid/todo-backend#readme"
+}
