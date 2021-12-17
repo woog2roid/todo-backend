@@ -1,10 +1,9 @@
-const app = require("./src/app.js");
-const express = require('express');
+const app = require("./src/app");
 const http = require("http");
 const https = require("https");
 require('dotenv').config({ path: "./.env"}); 
 
-const port = process.env.PORT;
+const port = process.env.PORT||3000;
 
 const option =
 	process.env.NODE_ENV === 'production'
