@@ -4,6 +4,7 @@ const morgan = require('morgan');
 require('dotenv').config({ path: '../.env' });
 const { sequelize } = require('./database/models');
 const router = require('./routes');
+const { verifyToken } = require('./middlewares/auth');
 
 const app = express();
 
@@ -16,7 +17,11 @@ sequelize.sync({ force: false })
 	});
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+	origin: ["https://todo-frontend-vepxk.run.goorm.io",
+			 "https://woog2roid.github.io"],
+	credentials: true,
+}));
 app.use(morgan('dev'));
 
 app.use('/', router);

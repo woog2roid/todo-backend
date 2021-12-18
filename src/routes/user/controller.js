@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const User = require('../../database/models/user');
+const { issueToken } = require('../../middlewares/auth');
 
 const checkId = async (req, res) => {
 	//console.log('요청: 아이디 중복 체크');
@@ -43,23 +44,24 @@ const join = async (req, res) => {
 	}
 };
 
-const login = async (req, res) => {
+const login = async (req, res, next) => {
 	console.log('요청: 로그인');
 	const {id, password} = req.body;
 	const user = await User.findOne({where: { id }});
 	if (user) {
 		const isMatched = await bcrypt.compare(password, user.password);
 		if (isMatched) {
-			res.sendStatus(200);
+			const token = issueToken(user);
+			res.status(200).send({token});
 			console.log(`로그인: 성공: id=${id}`);
 		} else {
 			//비밀번호 오류
-			res.status(401).send({code:"password not matched"});
+			res.status(401).send({message: "password not matched"});
 				console.log(`로그인: 실패: 비밀번호 오류`);
 		}
 	} else {
 		//아이디가 없음
-		res.status(401).send({code:"id not found"});
+		res.status(401).send({message: "id not found"});
 		console.log(`로그인: 실패: 아이디 오류`);
 	}
 };
