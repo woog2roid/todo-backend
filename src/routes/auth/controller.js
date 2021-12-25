@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const User = require('../../database/models/user');
 const { issueToken } = require('../../middlewares/jwtAuth');
 
-const checkId = async (req, res) => {
+const isIdDuplicated = async (req, res) => {
 	const id = req.body.id;
 	const user = await User.findOne({where: { id }});
 	if(user) {
@@ -14,7 +14,7 @@ const checkId = async (req, res) => {
 	}
 };
 
-const checkNickname = async (req, res) => {
+const isNicknameDuplicated = async (req, res) => {
 	const nickname = req.body.nickname;
 	const user = await User.findOne({where: { nickname }});
 	if(user) {
@@ -56,7 +56,7 @@ const login = async (req, res, next) => {
 					httpOnly: true,
 				})
 				.status(200)
-				.send();
+				.send({user});
 			console.log(`로그인: 성공: id=${id}`);
 		} else {
 			//비밀번호 오류
@@ -76,8 +76,8 @@ const logout = async (req, res, next) => {
 }
 
 module.exports = {
-	checkId,
-	checkNickname,
+	isIdDuplicated,
+	isNicknameDuplicated,
 	join,
 	login,
 	logout,
