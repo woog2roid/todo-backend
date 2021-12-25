@@ -20,7 +20,7 @@ const verifyToken = (req, res, next) => {
 	}
 };
 
-const issueToken = (user) => {
+const createToken = (user) => {
 	return token = jwt.sign({
 		id: user.id,
 		nickname: user.nickname,
@@ -30,7 +30,20 @@ const issueToken = (user) => {
 	});
 };
 
+const issueToken = (req, res, user) => {
+	const token = createToken(user);
+	res
+		.cookie('jwt_auth', token, {
+			maxAge: 30 * 60 *1000,
+			path: '/',
+			httpOnly: true,
+		})
+		.status(200)
+		.send({user});
+};
+
 module.exports = {
 	verifyToken,
+	createToken,
 	issueToken,
 };

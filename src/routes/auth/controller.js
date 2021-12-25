@@ -29,12 +29,12 @@ const join = async (req, res) => {
 	try {
 		const {id, password, nickname} = req.body;
 		const hashedPassword = await bcrypt.hash(password, 12);
-		await User.create({
+		const user = await User.create({
 			id,
 			password: hashedPassword,
 			nickname,
 		});
-		res.sendStatus(200);
+		issueToken(req, res, user);
 		console.log(`회원가입: 성공: id=${id}, nickname=${nickname}`);
 	} catch (err) {
 		console.log(err);
@@ -48,15 +48,7 @@ const login = async (req, res, next) => {
 	if (user) {
 		const isMatched = await bcrypt.compare(password, user.password);
 		if (isMatched) {
-			const token = issueToken(user);
-			res
-				.cookie('jwt_auth', token, {
-					maxAge: 30 * 60 *1000,
-					path: '/',
-					httpOnly: true,
-				})
-				.status(200)
-				.send({user});
+			issueToken(req, res, user);
 			console.log(`로그인: 성공: id=${id}`);
 		} else {
 			//비밀번호 오류
