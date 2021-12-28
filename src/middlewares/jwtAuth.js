@@ -6,7 +6,13 @@ const verifyToken = (req, res, next) => {
 	//console.log(req.cookies);
 	try {
 		req.decoded = jwt.verify(req.cookies.jwt_auth, process.env.JWT_KEY);
-		next();
+		if(req.decoded === undefined) {
+			res.status(401).send({
+				message: "token not valid",	
+			});
+		} else {
+			next();
+		}
 	} catch (err) {
 		if (err.name === 'TokenExpiredError') {
 			return res.status(401).send({

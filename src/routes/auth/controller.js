@@ -26,19 +26,19 @@ const isNicknameDuplicated = async (req, res) => {
 
 const join = async (req, res) => {
 	console.log('요청: 회원가입');
-	try {
-		const {id, password, nickname} = req.body;
-		const hashedPassword = await bcrypt.hash(password, 12);
-		const user = await User.create({
-			id,
-			password: hashedPassword,
-			nickname,
-		});
+	const {id, password, nickname} = req.body;
+	const hashedPassword = await bcrypt.hash(password, 12);
+	const user = await User.create({
+		id,
+		password: hashedPassword,
+		nickname,
+	}).then( user => {
 		issueToken(req, res, user);
 		console.log(`회원가입: 성공: id=${id}, nickname=${nickname}`);
-	} catch (err) {
+	}).catch(err => {
+		res.sendStatus(400);
 		console.log(err);
-	}
+	});
 };
 
 const login = async (req, res, next) => {
@@ -65,7 +65,7 @@ const login = async (req, res, next) => {
 const logout = async (req, res, next) => {
 	console.log('요청: 로그아웃');
 	res.clearCookie('jwt_auth').sendStatus(200);
-}
+};
 
 module.exports = {
 	isIdDuplicated,

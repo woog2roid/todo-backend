@@ -8,10 +8,6 @@ module.exports = class Todo extends Sequelize.Model {
 					type: Sequelize.STRING(50),
 					allowNull: false,
 				},
-				deadline: {
-					type: Sequelize.DATE,
-					allowNull: false,
-				},
 				isDone: {
 					type: Sequelize.BOOLEAN,
 					allowNull: false,
