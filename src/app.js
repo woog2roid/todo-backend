@@ -29,4 +29,10 @@ app.use(morgan('dev'));
 
 app.use('/', router);
 
+app.use((err, req, res, next) => {
+	console.log("[서버 내부 오류 발생], 오류 내용 이하.");
+	console.log(err);
+	return res.sendStatus(500);
+});
+
 module.exports = app;

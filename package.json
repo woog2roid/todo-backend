@@ -2,7 +2,6 @@
   "name": "todo-backend",
   "version": "1.0.0",
   "description": "todo practice - backend [express, typescript, sequelize]",
-  "main": "index.js",
   "dependencies": {
     "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.6",
