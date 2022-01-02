@@ -5,12 +5,13 @@ require('dotenv').config({ path: '../../.env' });
 const verifyToken = (req, res) => {
 	jwt.verify(req.cookies.jwt_auth, process.env.JWT_KEY, (err, decoded) => {
 		if(err) {
+			console.log("[jwt 검증과정에서 에러발생]:", err.name);
 			if (err.name === 'TokenExpiredError') {
-				res.status(401).send({
+				return res.status(401).send({
 					message: "token expired",
 				});
 			} else {
-				res.status(401).send({
+				return res.status(401).send({
 					message: 'token not valid',
 				})
 			}
@@ -36,7 +37,7 @@ const createToken = (user) => {
 
 const issueToken = (req, res, user) => {
 	const token = createToken(user);
-	return res
+	res
 		.cookie('jwt_auth', token, {
 			maxAge: 30 * 60 * 1000,
 			path: '/',

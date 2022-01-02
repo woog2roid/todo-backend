@@ -5,9 +5,8 @@ const { verifyToken } = require('../../middlewares/jwtAuth');
 
 const getTodo = async (req, res, next) => {
 	verifyToken(req, res);
-	console.log(req.decoded)
-	const id = req.decoded.id;
-	await Todo.findAll({ where: { user: id } })
+	const user = req.decoded.id;
+	await Todo.findAll({ where: { user } })
 		.then((todos) => {
 			res.send({ todos });
 		})
@@ -19,15 +18,15 @@ const getTodo = async (req, res, next) => {
 //addTodo하면 성공시에 업데이트된 todo-list를 다시 보내주는 거로.
 const addTodo = async (req, res, next) => {
 	verifyToken(req, res);
-	const { id } = req.decoded;
+	const user = req.decoded.id;
 	const { title, detail } = req.body;
 	await Todo.create({
 			title,
 			detail,
 			isDone: false,
-			user: id,
-		}).then((todo) => {
-			getTodo(req, res, next);
+			user,
+		}).then(() => {
+			res.sendStatus(200);
 		}).catch(err => {
 			next(err);
 		});
@@ -35,9 +34,9 @@ const addTodo = async (req, res, next) => {
 
 const deleteTodo = async (req, res, next) => {
 	verifyToken(req, res);
-	const id = req.decoded.id;
-	const { title } = req.body;
-	await Todo.delete({ where: { title: title, user: id } })
+	const user = req.decoded.id;
+	const { id } = req.params;
+	await Todo.destroy({ where: { id, user } })
 		.then(() => {
 			res.sendStatus(200);
 		})
@@ -46,7 +45,22 @@ const deleteTodo = async (req, res, next) => {
 		});
 };
 
-const patchTodo = async () => {};
+const patchTodo = async (req, res, next) => {
+	verifyToken(req, res);
+	const user = req.decoded.id;
+	const { id, title, detail, isDone } = req.body;
+	await Todo.update({
+			isDone, title, detail
+		}, {
+			where: {id, user}
+		})
+		.then(() => {
+			res.sendStatus(200);
+		})
+		.catch((err) => {
+			next(err);
+		});
+};
 
 module.exports = {
 	getTodo,
