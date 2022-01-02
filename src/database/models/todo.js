@@ -8,6 +8,10 @@ module.exports = class Todo extends Sequelize.Model {
 					type: Sequelize.STRING(50),
 					allowNull: false,
 				},
+				detail: {
+					type: Sequelize.STRING(80),
+					allowNull: true,
+				},
 				isDone: {
 					type: Sequelize.BOOLEAN,
 					allowNull: false,
@@ -26,7 +30,7 @@ module.exports = class Todo extends Sequelize.Model {
 	}
 
 	static associate(db) {
-		db.Todo.belongsTo(db.User, {foreignKey: 'user', sourcekey:'id'});
+		db.Todo.belongsTo(db.User, {foreignKey: 'user', targetkey:'id'});
 		db.Todo.hasMany(db.Comment, {foreignKey: 'todo', sourcekey:'id'});
 	}
 };

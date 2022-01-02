@@ -4,7 +4,7 @@ module.exports = class User extends Sequelize.Model {
 	static init(sequelize) {
 		return super.init({
 			id: {
-				type: Sequelize.STRING(15),
+				type: Sequelize.STRING(30),
 				allowNull: false,
 				primaryKey: true,
 			},	
@@ -13,7 +13,7 @@ module.exports = class User extends Sequelize.Model {
 				allowNull: false,
 			},
 			nickname: {
-				type: Sequelize.STRING(15),
+				type: Sequelize.STRING(30),
 				allowNull: false,
 				unique: true,
 			}
