@@ -5,6 +5,19 @@ const { verifyToken } = require('../../middlewares/jwtAuth');
 
 const getTodo = async (req, res, next) => {
 	verifyToken(req, res);
+	const user = req.decoded.id;	
+	const todoId = req.params.id;
+	await Todo.findOne({ where: { id:todoId, user } })
+	.then((todo) => {
+		res.send({ todo });
+	})
+	.catch((err) => {
+		next(err);
+	});
+};
+
+const getTodos = async (req, res, next) => {
+	verifyToken(req, res);
 	const user = req.decoded.id;
 	await Todo.findAll({ where: { user } })
 		.then((todos) => {
@@ -15,7 +28,6 @@ const getTodo = async (req, res, next) => {
 		});
 };
 
-//addTodo하면 성공시에 업데이트된 todo-list를 다시 보내주는 거로.
 const addTodo = async (req, res, next) => {
 	verifyToken(req, res);
 	const user = req.decoded.id;
@@ -63,6 +75,7 @@ const patchTodo = async (req, res, next) => {
 };
 
 module.exports = {
+	getTodos,
 	getTodo,
 	addTodo,
 	deleteTodo,
