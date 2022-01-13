@@ -21,5 +21,6 @@ module.exports = class Comment extends Sequelize.Model {
 	
 	static associate(db) {
 		db.Comment.belongsTo(db.Todo, {foreignKey: 'todo', targetkey: 'id'});
+		db.Comment.belongsTo(db.User, {foreignKey: 'user', targetkey: 'id'});
 	}
-}
+};
