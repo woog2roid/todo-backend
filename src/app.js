@@ -18,13 +18,14 @@ sequelize.sync({ force: false })
 
 app.use(express.json());
 app.use(cookieParser());
+
 app.use(cors({
-	origin: ["https://todo-frontend-vepxk.run.goorm.io",
-			 "https://woog2roid.github.io"],
+	origin: ['https://woog2roid.github.io'],
 	allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept',
 					'X-Accept-Token', 'Authorization'],
 	credentials: true,
 }));
+
 app.use(morgan('dev'));
 
 app.use('/', router);

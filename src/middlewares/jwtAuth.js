@@ -2,23 +2,22 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 require('dotenv').config({ path: '../../.env' });
 
-const verifyToken = (req, res) => {
-	jwt.verify(req.cookies.jwt_auth, process.env.JWT_KEY, (err, decoded) => {
-		if(err) {
-			console.log("[jwt 검증과정에서 에러발생]:", err.name);
-			if (err.name === 'TokenExpiredError') {
-				return res.status(401).send({
-					message: "token expired",
-				});
-			} else {
-				return res.status(401).send({
-					message: 'token not valid',
-				})
-			}
+const verifyToken = (req, res, next) => {
+	try {
+		const decoded = jwt.verify(req.cookies.jwt_auth, process.env.JWT_KEY);
+		req.decoded = decoded;
+		return next();
+	} catch(err) {
+		if (err.name === 'TokenExpiredError') {
+			return res.status(401).send({
+				message: "token expired",
+			});
 		} else {
-			req.decoded = decoded;
-		}	
-	});
+			return res.status(401).send({
+				message: 'token not valid',
+			});
+		}
+	}
 };
 
 const createToken = (user) => {
