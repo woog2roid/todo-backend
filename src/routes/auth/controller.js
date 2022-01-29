@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const User = require('../../database/models/user');
-const { issueToken } = require('../../middlewares/jwtAuth');
+const { issueToken, destroyToken } = require('../../middlewares/jwtAuth');
 
-const isIdDuplicated = async (req, res) => {
+const isIdDuplicated = async (req, res, next) => {
 	try {
 		const id = req.body.id;
 		const user = await User.findOne({where: { id }});
@@ -18,7 +18,7 @@ const isIdDuplicated = async (req, res) => {
 	}
 };
 
-const isNicknameDuplicated = async (req, res) => {
+const isNicknameDuplicated = async (req, res, next) => {
 	try {
 		const nickname = req.body.nickname;
 		const user = await User.findOne({where: { nickname }});
@@ -49,7 +49,7 @@ const join = async (req, res, next) => {
 	}
 };
 
-const login = async (req, res) => {
+const login = async (req, res, next) => {
 	try {		
 		console.log('[요청: 로그인]');
 		const {id, password} = req.body;
@@ -74,10 +74,10 @@ const login = async (req, res) => {
 	}
 };
 
-const logout = async (req, res) => {
+const logout = async (req, res, next) => {
 	try {
 		console.log('[요청: 로그아웃]');
-		res.clearCookie('jwt_auth').sendStatus(200);
+		destroyToken(req, res);
 	} catch(err) {
 		next(err);
 	}

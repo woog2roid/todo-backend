@@ -7,10 +7,10 @@ const verifyToken = (req, res, next) => {
 		const decoded = jwt.verify(req.cookies.jwt_auth, process.env.JWT_KEY);
 		req.decoded = decoded;
 		return next();
-	} catch(err) {
+	} catch (err) {
 		if (err.name === 'TokenExpiredError') {
 			return res.status(401).send({
-				message: "token expired",
+				message: 'token expired',
 			});
 		} else {
 			return res.status(401).send({
@@ -21,35 +21,58 @@ const verifyToken = (req, res, next) => {
 };
 
 const createToken = (user) => {
-	return token = jwt.sign(
-		{
-			id: user.id,
-			nickname: user.nickname,
-		},
-		process.env.JWT_KEY,
-		{
-			expiresIn: '30m',
-			issuer: 'woog2roid',
-		}
-	);
+	try {
+		return (token = jwt.sign(
+			{
+				id: user.id,
+				nickname: user.nickname,
+			},
+			process.env.JWT_KEY,
+			{
+				expiresIn: '30m',
+				issuer: 'woog2roid',
+			}
+		));
+	} catch (err) {
+		console.log(err);
+	}
 };
 
 const issueToken = (req, res, user) => {
-	const token = createToken(user);
-	res
-		.cookie('jwt_auth', token, {
+	try {
+		const token = createToken(user);
+		res.cookie('jwt_auth', token, {
 			maxAge: 30 * 60 * 1000,
 			path: '/',
 			httpOnly: true,
 			secure: true,
 			sameSite: 'none',
 		})
-		.status(200)
-		.send({ user });
+			.status(200)
+			.send({ user });
+	} catch (err) {
+		console.log(err);
+	}
+};
+
+const destroyToken = async (req, res) => {
+	try {
+		await res
+			.clearCookie('jwt_auth', {
+				path: '/',
+				secure: true,
+				sameSite: 'none',
+			})
+			.end();
+		console.log(req.cookies.jwt_auth);
+	} catch (err) {
+		console.log(err);
+	}
 };
 
 module.exports = {
 	verifyToken,
 	createToken,
 	issueToken,
+	destroyToken,
 };
