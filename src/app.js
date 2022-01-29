@@ -21,8 +21,6 @@ app.use(cookieParser());
 
 app.use(cors({
 	origin: ['https://woog2roid.github.io'],
-	allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept',
-					'X-Accept-Token', 'Authorization'],
 	credentials: true,
 }));
 

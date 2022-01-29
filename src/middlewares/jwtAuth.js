@@ -41,6 +41,8 @@ const issueToken = (req, res, user) => {
 			maxAge: 30 * 60 * 1000,
 			path: '/',
 			httpOnly: true,
+			secure: true,
+			sameSite: 'none',
 		})
 		.status(200)
 		.send({ user });
