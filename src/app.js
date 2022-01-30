@@ -22,7 +22,7 @@ app.use(cookieParser());
 
 app.use(
 	cors({
-		origin: ['https://woog2roid.github.io', 'https://service.woog2roid.dev'],
+		origin: ['https://woog2roid.github.io', 'https://service.woog2roid.dev', 'https://todo.woog2roid.dev'],
 		credentials: true,
 	})
 );
