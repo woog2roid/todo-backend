@@ -8,7 +8,8 @@ const router = require('./routes');
 
 const app = express();
 
-sequelize.sync({ force: false })
+sequelize
+	.sync({ force: false })
 	.then(() => {
 		console.log('Database is working well');
 	})
@@ -19,17 +20,19 @@ sequelize.sync({ force: false })
 app.use(express.json());
 app.use(cookieParser());
 
-app.use(cors({
-	origin: ['https://woog2roid.github.io'],
-	credentials: true,
-}));
+app.use(
+	cors({
+		origin: ['https://woog2roid.github.io', 'https://service.woog2roid.dev'],
+		credentials: true,
+	})
+);
 
 app.use(morgan('dev'));
 
 app.use('/', router);
 
 app.use((err, req, res, next) => {
-	console.log("[서버 내부 오류 발생], 오류 내용 이하.");
+	console.log('[서버 내부 오류 발생], 오류 내용 이하.');
 	console.log(err);
 	return res.sendStatus(500);
 });

@@ -43,10 +43,11 @@ const issueToken = (req, res, user) => {
 		const token = createToken(user);
 		res.cookie('jwt_auth', token, {
 			maxAge: 30 * 60 * 1000,
-			path: '/',
 			httpOnly: true,
+			path: '/',
 			secure: true,
 			sameSite: 'none',
+			domain: '.woog2roid.dev',
 		})
 			.status(200)
 			.send({ user });
@@ -55,16 +56,14 @@ const issueToken = (req, res, user) => {
 	}
 };
 
-const destroyToken = async (req, res) => {
+const destroyToken = (req, res) => {
 	try {
-		await res
-			.clearCookie('jwt_auth', {
-				path: '/',
-				secure: true,
-				sameSite: 'none',
-			})
-			.end();
-		console.log(req.cookies.jwt_auth);
+		res.clearCookie('jwt_auth', {
+			path: '/',
+			secure: true,
+			sameSite: 'none',
+			domain: '.woog2roid.dev',
+		}).end();
 	} catch (err) {
 		console.log(err);
 	}
