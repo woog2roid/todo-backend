@@ -3,6 +3,4 @@
 
 ### 링크 
 - [백엔드](https://github.com/woog2roid/todo-backend)
-	- [프로젝트를 통해 배운 것 정리(백엔드)](https://github.com/woog2roid/todo-backend/blob/main/what_i_learned/README.md)
 - [프론트엔드](https://github.com/woog2roid/todo-frontend)
-	- [프로젝트를 통해 배운 것 정리(프론트엔드)](https://github.com/woog2roid/todo-frontend/blob/main/what_i_learned/README.md)
